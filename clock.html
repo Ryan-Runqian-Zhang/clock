@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>时钟</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card: #1e293b;
+      --text: #e2e8f0;
+      --accent: #38bdf8;
+      --muted: #64748b;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--bg);
+      font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+      color: var(--text);
+    }
+
+    .clock {
+      text-align: center;
+    }
+
+    .time {
+      font-size: clamp(4rem, 15vw, 10rem);
+      font-weight: 200;
+      letter-spacing: 0.05em;
+      font-variant-numeric: tabular-nums;
+      line-height: 1;
+    }
+
+    .time .colon {
+      color: var(--accent);
+      animation: blink 1s steps(1) infinite;
+    }
+
+    .date {
+      margin-top: 1.25rem;
+      font-size: 1.25rem;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+    }
+
+    @keyframes blink {
+      50% { opacity: 0.2; }
+    }
+  </style>
+</head>
+<body>
+  <div class="clock">
+    <div class="time" id="time">00:00:00</div>
+    <div class="date" id="date"></div>
+  </div>
+
+  <script>
+    const timeEl = document.getElementById("time");
+    const dateEl = document.getElementById("date");
+
+    const pad = (n) => String(n).padStart(2, "0");
+
+    function tick() {
+      const now = new Date();
+
+      // 用单独元素包住冒号，实现冒号闪烁
+      timeEl.innerHTML =
+        `${pad(now.getHours())}<span class="colon">:</span>` +
+        `${pad(now.getMinutes())}<span class="colon">:</span>` +
+        pad(now.getSeconds());
+
+      const weekdays = ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"];
+      dateEl.textContent =
+        `${now.getFullYear()} 年 ${now.getMonth() + 1} 月 ${now.getDate()} 日 ${weekdays[now.getDay()]}`;
+    }
+
+    tick();
+    setInterval(tick, 1000);
+  </script>
+</body>
+</html>
